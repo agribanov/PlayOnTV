@@ -73,7 +73,7 @@ var
   },
   _unpair = function(socket, data){
     socket.emit('device:unpair', data);
-    var deviceId = String(req.data._id),
+    var deviceId = String(data._id),
         user = socket.handshake.session.passport.user;
 
     user.devices = _.filter(user.devices, function(d){

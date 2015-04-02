@@ -12,7 +12,7 @@ var
     console.log('play', data);
     if (index > -1){
       socket.join(deviceId);
-      socket.broadcast.to(deviceId).emit('playback:play', data);
+      socket.to(deviceId).emit('playback:play', data);
     }
   };
 

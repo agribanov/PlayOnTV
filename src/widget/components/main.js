@@ -16,7 +16,7 @@ var main = React.createClass({
     this.setState({
       key: data.key
     });
-    alert('received key', data.key);
+    alert('received key ' + data.key);
   },
 
   onPlay: function(data){
@@ -52,9 +52,11 @@ var main = React.createClass({
     socket.on('error', function(err, data){
       alert('error ' + err);
     });
-    socket.emit('device:register', device);
+    socket.on('connect', function(){
+      socket.emit('device:register', device);
+    });
     socket.on('key:generate', this.onKeyGenerate);
-    socket.on('playback:play', function(data){console.log('play', data)});
+    socket.on('playback:play', this.onPlay);
 
     alert("component mounted");
 
