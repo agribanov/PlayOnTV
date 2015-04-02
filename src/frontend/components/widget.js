@@ -11,7 +11,7 @@ var widget = React.createClass({
 
   componentDidMount: function() {
     var device = {code: 'SamsungDevice', title: 'Samsung SmartTV'};
-    this.socket = socket = io.connect('http://localhost:3000');
+    this.socket = socket = io.connect('ws://localhost:3000');
     socket.emit('device:register', device);
     socket.on('key:generate', this.onKeyGenerate);
     socket.on('playback:play', function(data){console.log('play', data)});

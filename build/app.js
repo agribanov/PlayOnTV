@@ -19796,8 +19796,13 @@ module.exports = React.createClass({displayName: "exports",
     };
   },
   componentDidMount: function() {
-    this.socket = socket = io.connect();
-    socket.emit('device:list');
+    this.socket = socket = io();
+    socket.on('connect_failed', function(err){
+      console.log('connect_failed', err);
+    });
+    socket.on('connect', function(){
+      socket.emit('device:list');
+    });
     socket.on('device:list', this.onDeviseList);
     socket.on('device:pair', this.onDevicePair);
     socket.on('device:unpair', this.onDeviceUnpair);

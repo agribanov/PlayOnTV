@@ -3,15 +3,16 @@ var authorize = require('../lib/authorize')('user'),
   ;
 
 var
-  _play = function(req){
-    deviceId = String(req.data.deviceId);
-    var index = _.findIndex(req.session.passport.user.devices, function(d){
+  _play = function(socket, data){
+    deviceId = String(data.deviceId);
+    var index = _.findIndex(socket.handshake.session.passport.user.devices, function(d){
         return String(d) == deviceId;
       });
     console.log(index, deviceId);
+    console.log('play', data);
     if (index > -1){
-      req.io.join(req.data.deviceId);
-      req.io.room(req.data.deviceId).broadcast('playback:play',req.data);
+      socket.join(deviceId);
+      socket.broadcast.to(deviceId).emit('playback:play', data);
     }
   };
 

@@ -90,9 +90,9 @@ gulp.task('browserify:widget', function(){
 gulp.task('server:start', function(){
   server.listen(config.server, function( error ) {
         livereload.listen(error);
-        if( ! error ) {
-          bs( config.bs );
-        }
+        // if( ! error ) {
+        //   bs( config.bs );
+        // }
     });
 });
 

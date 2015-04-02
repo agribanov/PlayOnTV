@@ -1,7 +1,7 @@
 module.exports = 
 {
   server: {
-    port: 3000
+    port: 3001
   },
   auth:{
     clientID:     '152072072093-60shq6h75fks19rva26t43birspkd0s1.apps.googleusercontent.com',
@@ -12,5 +12,6 @@ module.exports =
   mongo: {
     connection: 'mongodb://localhost/test'
   },
-  session: {secret: 'express.io makes me happy'}
+  session: {secret: 'express makes me happy'},
+  cookie: {secret: 'cookie secret'}
 }

@@ -7,40 +7,40 @@ var authorize = require('../lib/authorize')('user'),
 ;
 
 var
-  _connectDevice = function(req, device){
-    req.session.device = device;
-    req.io.join(String(device._id));
+  _connectDevice = function(socket, device){
+    socket.handshake.session.device = device;
+    socket.join(String(device._id));
   },
-  _register = function(req){
-    Device.findOne({ code: req.data.code }, function(err, device){
+  _register = function(socket, data){
+    Device.findOne({ code: data.code }, function(err, device){
       if (err)
         return console.log(err);
 
       if (!device){
         device = new Device({
-          code: req.data.code,
-          title: req.data.title
+          code: data.code,
+          title: data.title
         });
         device.save(function(err){
           if (err)
             console.log(err);
-          _connectDevice(req, device);
+          _connectDevice(socket, device);
         })
       }
       else {
-          _connectDevice(req, device);
+          _connectDevice(socket, device);
       }
     });
   },
-  _list = function(req){
-    User.findOne({_id: req.session.passport.user._id}).populate('devices').exec(function(err, user){
-      req.io.emit('device:list', user.devices);
+  _list = function(socket){
+    User.findOne({_id: socket.handshake.session.passport.user._id}).populate('devices').exec(function(err, user){
+      socket.emit('device:list', user.devices);
     })
   },
-  _pair = function(req){
+  _pair = function(socket, data){
     async.waterfall([
       function(cb){
-        Keys.findOne({key: req.data}, cb);
+        Keys.findOne({key: data}, cb);
       },
       function(key,cb){
         if (!key) return;
@@ -48,8 +48,8 @@ var
       },
       function(device, cb){
         if (!device) reutrn;
-        User.update({_id: req.session.passport.user._id})
-        User.findOne({_id: req.session.passport.user._id}, function(err, user){
+        User.update({_id: socket.handshake.session.passport.user._id})
+        User.findOne({_id: socket.handshake.session.passport.user._id}, function(err, user){
           if (err)
             return cb(err);
           cb(null, device, user);
@@ -65,16 +65,16 @@ var
           user.save(function(err){
             if (err)
               console.warn(err);
-            req.io.emit('device:pair', device);
+            socket.emit('device:pair', device);
           });
         }
       }
     ]);
   },
-  _unpair = function(req){
-    req.io.emit('device:unpair', req.data);
+  _unpair = function(socket, data){
+    socket.emit('device:unpair', data);
     var deviceId = String(req.data._id),
-        user = req.session.passport.user;
+        user = socket.handshake.session.passport.user;
 
     user.devices = _.filter(user.devices, function(d){
       String(d) !=deviceId;

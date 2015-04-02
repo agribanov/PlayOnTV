@@ -9,17 +9,17 @@ function randomValueHex (len) {
 }
 
 var
-  _generate = function(req){
+  _generate = function(socket){
     var key = randomValueHex(7);
-    Keys.remove({deviceId: req.session.device._id}, function(err){
-      var pair = new Keys({deviceId: req.session.device._id, key: key});
+    Keys.remove({deviceId: socket.handshake.session.device._id}, function(err){
+      var pair = new Keys({deviceId: socket.handshake.session.device._id, key: key});
       pair.save(function(err){
-        req.io.emit('key:generate', {key: key});
+        socket.emit('key:generate', {key: key});
       });
     })
   },
-  _remove = function(req){
-    Keys.remove({deviceId: req.session.device._id}, function(err){
+  _remove = function(socket){
+    Keys.remove({deviceId: socket.handshake.session.device._id}, function(err){
       if (err)
         console.log(err);
     })

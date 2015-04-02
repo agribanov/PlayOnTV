@@ -1,15 +1,15 @@
 var config = require('config'),
-    express = require('express.io'),
-    app     = express();
+    express = require('express'),
+    app     = express(),
+    http = require('http').Server(app),
+    io = require('socket.io')(http),
+    cookieParser = require('cookie-parser')(config.cookie.secret),
+    session = require('express-session')(config.session);
 
-app.use(express.cookieParser())
-app.use(express.session(config.session))
-
-app.http().io();
+app.use(cookieParser);
+app.use(session);
 
 require('./auth')(app);
-
-require('./routes')(app.io);
 
 app.use(function(req, res, next){
   if (!req.isAuthenticated())
@@ -17,8 +17,19 @@ app.use(function(req, res, next){
   next();
 });
 
+io.use(function(socket, next) {
+    var req = socket.handshake;
+    var res = {};
+    cookieParser(req, res, function(err) {
+        if (err) return next(err);
+        session(req, res, next);
+    });
+});
+
+require('./socket')(io);
+
 app.use(express.static('build'));
 
-require('./db')(app);
+require('./db')();
 
-require('./server')(app);
+require('./server')(http);
