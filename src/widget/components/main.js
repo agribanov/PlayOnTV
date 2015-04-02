@@ -5,13 +5,21 @@ var widgetAPI = new Common.API.Widget(),
     tvKey = new Common.API.TVKeyValue()
     ;
 
+var PlayerContainer = require('./player');
 
 var main = React.createClass({
   getInitialState: function() {
     return {
-      key: ''
+      key: '',
+      status: 'stoped'
     };
   },
+
+  onKeyDown: function(e) {
+    var keyCode = event.keyCode;
+    alert("Main Key code from React: " + keyCode);
+  },
+
   onKeyGenerate: function(data){
     this.setState({
       key: data.key
@@ -21,6 +29,9 @@ var main = React.createClass({
 
   onPlay: function(data){
     alert('play ' + data.url);
+    this.setState({status: 'playing'});
+    Player.setVideoURL(data.url);
+    Player.playVideo();
   },
 
   generateKey: function(e){
@@ -28,47 +39,48 @@ var main = React.createClass({
     this.socket.emit('key:generate');
   },
 
-  componentDidMount: function() {
-
-    // var socket = io.connect('http://playontv.herokuapp.com/');
-    // socket.on('all', function (data) { 
-    //   alert('Message type: ' + data.messagetype);
-    // });
-    // var socket = new WebSocket("ws://playontv.herokuapp.com/");
-    // socket.onopen = function() {
-    //   alert("Соединение установлено.");
-    // };
-    // socket.onerror = function(error) {
-    //   alert("Ошибка " + error.message);
-    // };
-    // socket.onmessage = function (event) {
-    //     alert(event.data);
-    //   };
-
-
-    widgetAPI.sendReadyEvent();
-    var device = {code: 'SamsungDevice', title: 'Samsung SmartTV'};
+  startSocket: function(device){
     this.socket = socket = io.connect('http://playontv.herokuapp.com/');
     socket.on('error', function(err, data){
       alert('error ' + err);
     });
     socket.on('connect', function(){
       socket.emit('device:register', device);
+      socket.emit('key:generate');
     });
     socket.on('key:generate', this.onKeyGenerate);
     socket.on('playback:play', this.onPlay);
+  },
 
+  initPlayer: function(){
+    alert('trying to init player');
+  if ( Player.init() && Audio.init()){
+    alert('player initialized');
+  } else {
+    alert('init player error');
+  }
+  },
+
+  componentDidMount: function() {
+    var device = {code: webapis.tv.info.getDeviceID(), title: 'Samsung SmartTV',  model:webapis.tv.info.getModel()};
+
+    this.startSocket(device);
+    this.initPlayer();
+    alert(device.code + ' title ' + device.title);
     alert("component mounted");
 
-    setTimeout(function(){
-      alert('quering for key');
-      socket.emit('key:generate');
-    },1000);
+    React.findDOMNode(this.refs.anchor).focus();
+
+    widgetAPI.sendReadyEvent();
   },
 
   render: function() {
     return (
-      <div><img src="http://icons.iconarchive.com/icons/hopstarter/puck/256/AIM-Express-icon.png" alt="logo" /><button onClick={this.generateKey}>Get Key</button> {this.state.key}</div>
+      <div>
+        <div className = "pairingKey">Pairing Key: {this.state.key}</div>
+        <a href='javascript:void(0);' ref='anchor' onKeyDown={this.onKeyDown}></a>
+        <PlayerContainer status = {this.state.status} />
+      </div>
     );
   }
 

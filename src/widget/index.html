@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/div/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -8,7 +8,21 @@
         <script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/Widget.js'></script>
         <script type='text/javascript' language='javascript' src='$MANAGER_WIDGET/Common/API/TVKeyValue.js'></script>
         <script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/webapi/1.0/webapis.js"></script>
+        <!-- Widget code -->
+        <!-- <script language="javascript" type="text/javascript" src="Javascript/Main.js"></script> -->
+<!--         <script language="javascript" type="text/javascript" src="Javascript/Server.js"></script>
+        <script language="javascript" type="text/javascript" src="Javascript/Data.js"></script> -->
+        <script language="javascript" type="text/javascript" src="lib/Player.js"></script>
+        <!-- <script language="javascript" type="text/javascript" src="Javascript/Display.js"></script> -->
+        <script language="javascript" type="text/javascript" src="lib/Audio.js"></script>
+
+        <!-- Plugins -->
+        <object id="pluginPlayer1" border=0 classid="clsid:SAMSUNG-INFOLINK-SEF"></object>
+        <object id="pluginAudio1" border=0 classid="clsid:SAMSUNG-INFOLINK-SEF"></object>
+        <object id="pluginObjectTVMW1" border=0 classid="clsid:SAMSUNG-INFOLINK-SEF"></object>
+
         <script src="http://playontv.herokuapp.com/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" href="app.css" />
         <style>
             #app {
                 color: white;
@@ -18,6 +32,6 @@
     </head>
     <body>
     <div id="app"></div>
-        <script type="text/javascript" language="javascript" src="app.js"></script>
+    <script type="text/javascript" language="javascript" src="app.js"></script>
     </body>
 </html>

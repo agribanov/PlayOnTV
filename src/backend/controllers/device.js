@@ -47,8 +47,8 @@ var
         Device.findOne({_id: key.deviceId}, cb)
       },
       function(device, cb){
-        if (!device) reutrn;
-        User.update({_id: socket.handshake.session.passport.user._id})
+        if (!device) return;
+        // User.update({_id: socket.handshake.session.passport.user._id})
         User.findOne({_id: socket.handshake.session.passport.user._id}, function(err, user){
           if (err)
             return cb(err);
@@ -65,6 +65,7 @@ var
           user.save(function(err){
             if (err)
               console.warn(err);
+            socket.handshake.session.passport.user.devices.push(device._id);
             socket.emit('device:pair', device);
           });
         }
