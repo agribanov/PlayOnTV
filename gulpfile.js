@@ -7,6 +7,7 @@ var config  = require('./gulp.config'),
     LessPluginAutoPrefix = require('less-plugin-autoprefix'),
     autoprefix = new LessPluginAutoPrefix({ browsers: ["last 2 versions"] }),
     less    = require('gulp-less'),
+    uglify    = require('gulp-uglify'),
     server  = require('gulp-develop-server'),
     bs      = require( 'browser-sync' ),
     livereload = require( 'gulp-livereload' );
@@ -84,6 +85,7 @@ gulp.task('browserify:frontend', function(){
 gulp.task('browserify:widget', function(){
   return gulp.src(config.main.widget.js)
       .pipe(browserify({transform: 'reactify'}))
+      .pipe(uglify())
       .pipe(gulp.dest(config.widgetCompileDir));
 })
 

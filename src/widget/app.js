@@ -6,31 +6,10 @@ var React = require('react'),
 React.render(<App />, document.getElementById('app'));
 
 
-// alert ('app.js loaded');
-
-// var widgetAPI = new Common.API.Widget(),
-//     tvKey = new Common.API.TVKeyValue(),
-//     Main = {};
-
-// document.getElementsByTagName('body').item(0).addEventLstener('load', Main.onLoad);
-// document.getElementsByTagName('body').item(0).addEventLstener('unload', Main.onUnload);
-
-// Main.onLoad = function() {
-//     alert("Main.onLoad()");
-//     // this.enableKeys();
-//     widgetAPI.sendReadyEvent();
+// some overrides
+// Function.prototype.bind = function(ctx) {
+//     var fn = this;
+//     return function() {
+//         fn.apply(ctx, arguments);
+//     };
 // };
-
-// window.onShow = function () {
-//     alert("window.onShow()");
-// };
-
-// window.onHide = function () {
-//     alert("window.onHide()");
-// };
-
-// Main.onUnload = function() {
-//     alert("Main.onUnload()");
-// }
-
-// alert(Main);

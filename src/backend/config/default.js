@@ -13,5 +13,14 @@ module.exports =
     connection: 'mongodb://localhost/test'
   },
   session: {secret: 'express makes me happy'},
-  cookie: {secret: 'cookie secret'}
+  cookie: {secret: 'cookie secret'},
+  backgrounds:[
+  '/assets/backgrounds/1.jpg',
+  '/assets/backgrounds/2.jpg',
+  '/assets/backgrounds/3.jpg',
+  '/assets/backgrounds/4.jpg',
+  '/assets/backgrounds/5.jpg',
+  '/assets/backgrounds/6.jpg',
+  '/assets/backgrounds/7.jpg'
+  ]
 }

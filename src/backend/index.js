@@ -9,6 +9,18 @@ var config = require('config'),
 app.use(cookieParser);
 app.use(session);
 
+
+/* Random backgrounds */
+
+app.get('/bg', function(req, res){
+  var index = Math.floor((Math.random() * config.backgrounds.length));
+  res.redirect(config.backgrounds[index]);
+});
+
+app.use('/assets/backgrounds', express.static('build/assets/backgrounds'));
+
+/* ------ */
+
 require('./auth')(app);
 
 app.use(function(req, res, next){
